@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    
+</head>
+<body>
+    <h2>로그인</h2>
+    <form id="form" name="form">
+        <p>아이디: <input type="text" id="username" name="username"></p>
+        <p>비밀번호: <input type="password" id="password" name="password"></p>
+        <p><button type="submit">로그인</button></p>
+    </form>
+    <script>
+        const form = document.getElementById('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const formData = {
+                username: username,
+                password: password
+            }
+            const jsonData = JSON.stringify(formData);
+            fetch('http://localhost:8080/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Authorization' : 'Object.keys',
+                    'Content-Type':'application/json'
+                },
+                body: jsonData
+            })
+            .then(res => res.json())
+            .then(data => {
+                localStorage.setItem('userInfo', JSON.stringify(data))
+            console.log(data)
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트윗 리스트</title>
+</head>
+<body>
+    <h2>트윗 리스트</h2>
+    <script>
+        const userInfo = localStorage.getItem('userInfo')
+        let token
+        if(userInfo){
+            const userData = JSON.parse(userInfo)
+            console.log(userData)
+            token = userData.token
+        }else{
+            console.log('로그인 후 사용')
+        }
+
+        fetch('http://localhost:8080/tweets',{
+            method: 'GET',
+            headers: {
+                'Authorization' : `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        
+        
+    </script>
+    
+</body>
+</html>
