@@ -7,28 +7,51 @@
 </head>
 <body>
     <h2>트윗 리스트</h2>
+    <div id="container"></div>
     <script>
-        const userInfo = localStorage.getItem('userInfo')
-        let token
+        const userInfo = localStorage.getItem('userInfo');
+        let token;
         if(userInfo){
-            const userData = JSON.parse(userInfo)
-            console.log(userData)
-            token = userData.token
+            const userData = JSON.parse(userInfo);
+            console.log(userData);
+            token = userData.token;
         }else{
-            console.log('로그인 후 사용')
+            console.log('로그인 후 사용 바랍니다!');
         }
-
-        fetch('http://localhost:8080/tweets',{
+        fetch('http://localhost:8080/tweets', {
             method: 'GET',
             headers: {
-                'Authorization' : `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             }
         })
         .then(res => res.json())
-        .then(data => console.log(data))
-        
-        
+        .then(data => {
+            let div;
+            const container = document.getElementById('container');
+            for(const key in data) {
+                console.log(data);
+                div = document.createElement('div');
+                div.innerHTML = `${key}: ${data[key].id} / <b>${data[key].text}</b> (${data[key].username})`;
+                container.appendChild(div);
+                const delButton = document.createElement('button');
+                delButton.textContent = '삭제';
+                delButton.addEventListener('click', () => {
+                    // alert(`${data[key].id}`);
+                    deleteData(`${data[key].id}`);
+                });
+                div.appendChild(delButton);
+            }
+        });
+        function deleteData(index){
+            // console.log(token);
+            fetch('http://localhost:8080/tweets/' + index, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            location.reload();
+        }
     </script>
-    
 </body>
 </html>
